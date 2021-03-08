@@ -352,7 +352,7 @@ int ssd1306_test( void )
 
     initspipin( 154, "out" ); 
     setspipin( 154, 1 );
-    if ((spi = open( "/dev/spidev32766.0", O_RDWR )) < 0) {
+    if ((spi = open( "/dev/spidev2.0", O_RDWR )) < 0) {
         printf("Failed to open the bus.");
         exit( 1 );
     }

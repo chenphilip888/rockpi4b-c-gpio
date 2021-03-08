@@ -17,9 +17,7 @@ void pwm_open( void )
     FILE *fp;
     bool isdir;
     char path[100] = "";
-    char polarity[100] = "";
     strcpy( path, "/sys/class/pwm/pwmchip0/pwm0" );
-    strcpy( polarity, "/sys/class/pwm/pwmchip0/pwm0/polarity" ); 
     struct stat st = {0};
     if ( !stat(path, &st) ) {
         isdir = S_ISDIR( st.st_mode );
@@ -28,10 +26,15 @@ void pwm_open( void )
         fp = fopen( "/sys/class/pwm/pwmchip0/export", "w" );
         fprintf( fp, "%d", 0 );
         fclose( fp );
-        fp = fopen( polarity, "w" );
-        fputs( "normal", fp );
-        fclose( fp ); 
     }
+}
+
+void pwm_polarity( void )
+{
+    FILE *fp;
+    fp = fopen( "/sys/class/pwm/pwmchip0/pwm0/polarity", "w" );
+    fputs( "normal", fp );
+    fclose( fp );
 }
 
 void pwm_enable( void )
@@ -87,6 +90,7 @@ int pwm_led_test( void )
     pwm_open();
     pwm_period = pwm_freq( 60 );
     pwm_duty( 0, pwm_period );
+    pwm_polarity();
     pwm_enable();
 
     for ( i = 0; i < 10; i++ ) {
@@ -116,6 +120,7 @@ void tong( int note, int duration )
     } else {
         pwm_period = pwm_freq( note );
         pwm_duty( 0.5, pwm_period );
+        pwm_polarity();
         pwm_enable();
         usleep( duration );
         pwm_stop();
@@ -149,6 +154,7 @@ int servo( void )
     pwm_open();
     pwm_period = pwm_freq( 50 );
     pwm_duty( 0.05, pwm_period );
+    pwm_polarity();
     pwm_enable();
 
     for ( i = 0; i < 3; i++ ) {

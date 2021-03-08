@@ -41,7 +41,7 @@ int uart_test( void ) {
     fd = open("/dev/ttyS4", O_RDWR | O_NOCTTY );
     tcgetattr(fd, &tty);
 
-    tty.c_cflag = (B19200 | CLOCAL | CREAD | CS8);
+    tty.c_cflag = (B115200 | CLOCAL | CREAD | CS8);
     tty.c_iflag = IGNPAR;
     tty.c_oflag = 0;
     tty.c_lflag = 0;
